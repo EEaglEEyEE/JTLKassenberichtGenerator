@@ -3,6 +3,7 @@ Python Skript, dass einen Kassenbericht von JTL-Pos aus der Datenbank erstellt<b
 <br>
 Dieses Script ist zum automatischen Erstellen von Kassenberichten der Software von JTL. Dieser wird auch anschließend gleich per Mail versendet.<br>
 In der eigenen Kassenlösung (JTL-POS) von JTL besteht leider keine Möglichkeit einen Kassenbericht zu erstellen, aufgrund dessen habe ich ein kleines Skript geschrieben, welches diesen Job übernimmt.<br>
+Das Skript ist für JTL-POS Kassen optimiert funktioniert aber auch mit LS-POS.<br>
 <br>
 Das Script muss noch auf die individuellen Einstellungen angepasst werden. Diese Anpassungen sind in den Programmkommentaren beschrieben.<br>
 Obligatorische <tab id=t1>Anpassungen:<br>
