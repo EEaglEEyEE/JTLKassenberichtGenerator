@@ -6,7 +6,7 @@ In der eigenen Kassenlösung (JTL-POS) von JTL besteht leider keine Möglichkeit
 Das Skript ist für JTL-POS Kassen optimiert funktioniert aber auch mit LS-POS.<br>
 <br>
 Zum ausführen der Skripts wird <a href="https://www.python.org/">Python</a> und der <a href="https://www.microsoft.com/de-de/download/details.aspx?id=56567">ODBC Treiber</a>  benötigt. Anschließend kann das Skript einfach täglich vom Windows <a href="https://praxistipps.chip.de/aufgabenplanung-in-windows-10-so-gehts_48391">Aufgabenplaner</a> (oder ähnliches) aufgerufen werden.<br>
-Nach der Installation müssen noch die notwendigen Libs installiert werden: <i>pip install fpdf</i> und <i>pip install pyodbc</i>
+Nach der Installation müssen noch die notwendigen Libs installiert werden: <i>pip install fpdf</i> und <i>pip install pyodbc</i><br>
 Command zum ausführen: <i>#pathtopython#\python.exe JTLKassenberichtGenerator.py</i><br>
 <br>
 Das Script muss noch auf die individuellen Einstellungen angepasst werden. Diese Anpassungen sind in den Programmkommentaren beschrieben.<br>
