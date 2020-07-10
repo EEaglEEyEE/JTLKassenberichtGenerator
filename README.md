@@ -5,6 +5,8 @@ Dieses Script ist zum automatischen Erstellen von Kassenberichten der Software v
 In der eigenen Kassenlösung (JTL-POS) von JTL besteht leider keine Möglichkeit einen Kassenbericht zu erstellen, aufgrund dessen habe ich ein kleines Skript geschrieben, welches diesen Job übernimmt.<br>
 Das Skript ist für JTL-POS Kassen optimiert funktioniert aber auch mit LS-POS.<br>
 <br>
+Zum ausführen der Skripts wird <a href="https://www.python.org/">Python</a> benötigt. Anschließend kann das Skript einfach täglich vom Windows <a href="https://praxistipps.chip.de/aufgabenplanung-in-windows-10-so-gehts_48391">Aufgabenplaner</a> (oder ähnliches) aufgerufen werden.
+<br>
 Das Script muss noch auf die individuellen Einstellungen angepasst werden. Diese Anpassungen sind in den Programmkommentaren beschrieben.<br>
 Obligatorische <tab id=t1>Anpassungen:<br>
 Line 30 - SQL Server, Port und Instanz<br>
