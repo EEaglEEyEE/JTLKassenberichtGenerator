@@ -9,23 +9,13 @@ Zum ausführen der Skripts wird <a href="https://www.python.org/">Python</a> ben
 <br>
 Das Script muss noch auf die individuellen Einstellungen angepasst werden. Diese Anpassungen sind in den Programmkommentaren beschrieben.<br>
 Obligatorische <tab id=t1>Anpassungen:<br>
-Line 30 - SQL Server, Port und Instanz<br>
-Line 31 - Datenbankname<br>
-Line 32 - SQL User<br>
-Line 33 - SQL Password<br>
-Line 191 - Speicherpfad <br>
-Line 192 - Kassenname<br>
-Line 199 - Absender E-Mail<br>
-Line 200 - Empfänger E-Mail<br>
-Line 201 - Absender Passwort<br>
-Line 202 - Mail Server<br>
-Line 203 - Port<br>
+Line 39-41 - PDF Tabellenanpassung<br>
+Line 43-48 - Mail Einstellungen<br>
+Line 50-55 - Datenbankeinstellungen<br>
+Line 72/121 - Plattform-ID/Kassen-ID auswählen (Die Kassen-ID bei JTL-POS fängt bei 7 an und wird fortgeführt (7, 8, 9,...) bei LS-POS fängt es bei 151 an und wird auch einfach fortgeführt (152,153,...))<br>
 <br>
 Optionale Anpassungen:<br>
-Line 50/99 - Kassen-ID eintagen<br>
-Line 51/100 - Kassenbericht Datum<br>
-Line 107-116 - Tabellenanpassung<br>
-Line 192 - Kassenname<br>
+Line 28-37 - PDF Tabellenanpassung<br>
 <br>
 <br>
 WTFPL License 
