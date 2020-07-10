@@ -1,18 +1,18 @@
- #
- #            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
- #                    Version 2, December 2004
- #
- # Copyright (C) 2004 Sam Hocevar <sam@hocevar.net>
- #
- # Everyone is permitted to copy and distribute verbatim or modified
- # copies of this license document, and changing it is allowed as long
- # as the name is changed.
- #
- #            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
- #   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
- #
- #  0. You just DO WHAT THE FUCK YOU WANT TO.
- #
+#
+#            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+#                    Version 2, December 2004
+#
+# Copyright (C) 2004 Sam Hocevar <sam@hocevar.net>
+#
+# Everyone is permitted to copy and distribute verbatim or modified
+# copies of this license document, and changing it is allowed as long
+# as the name is changed.
+#
+#            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+#   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+#
+#  0. You just DO WHAT THE FUCK YOU WANT TO.
+#
 
 import pyodbc
 import ssl
@@ -25,16 +25,38 @@ from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-###         SQL: Verbindungsaufbau         ###
+# PDF Tabellenanpassung - optional
+Titel = 'Kassenbericht - Firma - Kasse'
+Bonnummer_width = 22
+Anzahl_width = 12
+Artikelname_width = 105
+Preis_width = 15
+Rabatt_width = 16
+Uhrzeit_width = 20
+border = 1
+header_row_height = 10
+
+# PDF - obligatorisch
+path = 'C:\Kassenberichte\\' # Speicherpfad des PDFs angeben
+Kassenname = 'Kasse' # Kassenname angeben
+
+# Mail - obligatorisch
+sender_email = "Absender E-Mail"
+receiver_email = "Empfänger E-Mail"
+password = "Absender Passwort"
+mail_server = "smtp.server.com"
+port = 465
+
+# SQL: Verbindungsaufbau - obligatorisch
 conn = pyodbc.connect('Driver={ODBC Driver 17 for SQL Server};'
-                      'Server=Serveradresse,Port\Instanz;'                  #SQL Server, Port und Instanz eintragen
-                      'Database=Datenbankname;'                             #Datenbankname eintragen
-                      'UID=user;'                                           #SQL User eintragen
-                      'PWD=Password;')                                      #SQL Password eintragen
+                      'Server=Serveradresse,Port\Instanz;'  # SQL Server, Port und Instanz eintragen
+                      'Database=Datenbankname;'  # Datenbankname eintragen
+                      'UID=user;'  # SQL User eintragen
+                      'PWD=Password;')  # SQL Password eintragen
 
 cursor = conn.cursor()
 
-###         SQL: Query         ###
+# SQL: Query
 cursor.execute('SELECT  b.cInetBestellNr, '
                'cast(bp.nAnzahl as float), '
                'bp.cString, '
@@ -64,16 +86,16 @@ AnzahlVerkaufteArtikel = 0
 i = 0
 n = len(data)
 
-#Rabatt
+# Rabatt
 while i < n:
     data[i] = list(data[i])
     data[i].insert(4, '')
 
     row = data[i]
 
-    #Rabattberechnung data[i - 1][4] = row[3] wenn der Rabatt als Preis angegeben werden soll
+    # Rabattberechnung data[i - 1][4] = row[3] wenn der Rabatt als Preis angegeben werden soll
     if "%" in row[2]:
-        data[i - 1][4] = str(round(row[3]/data[i - 1][3]/data[i - 1][1]*100))+'%'
+        data[i - 1][4] = str(round(row[3] / data[i - 1][3] / data[i - 1][1] * 100)) + '%'
         del data[i]
     else:
         i = i + 1
@@ -85,12 +107,12 @@ while i < n:
 print("Umsatz: " + str(round(Umsatz, 2)))
 print("AnzahlVerkaufteArtikel: " + str(AnzahlVerkaufteArtikel))
 
-###         SQL: Datum         ###
+# SQL: Datum
 Datum = "Fehler"
 Datum = cursor.execute('SELECT CAST(GETDATE() AS Date)').fetchone()[0]
 print("Datum: " + str(Datum))
 
-###         SQL: AnzahlVerkäufe         ###
+# SQL: AnzahlVerkäufe
 AnzahlVerkaeufe = "Fehler"
 AnzahlVerkaeufe = cursor.execute('SELECT COUNT(DISTINCT b.cInetBestellNr) '
                                  'FROM [eazybusiness].[dbo].[tBestellung] AS b '
@@ -103,19 +125,7 @@ AnzahlVerkaeufe = cursor.execute('SELECT COUNT(DISTINCT b.cInetBestellNr) '
 print("AnzahlVerkaeufe: " + str(AnzahlVerkaeufe))
 
 
-###         PDF         ### Hier lässt sich die Tabelle anpassen
-Titel = 'Kassenbericht - Firma - Kasse'
-Bonnummer_width = 22
-Anzahl_width = 12
-Artikelname_width = 105
-Preis_width = 15
-Rabatt_width = 16
-Uhrzeit_width = 20
-
-border = 1
-header_row_height = 10
-
-
+# PDF
 class PDF(FPDF):
     # Page Header
     def header(self):
@@ -187,20 +197,13 @@ for row in data:
 
     pdf.ln(row_height * spacing)
 
-#Speicherpdaf und -Name des PDFs
-path = 'C:\Kassenberichte\\'
-Kassenname = 'Kasse'
-filename = 'Kassenbericht_'+Kassenname+'-' + str(Datum) + '.pdf'
+# Output des PDFs
+filename = 'Kassenbericht_' + Kassenname + '-' + str(Datum) + '.pdf'
 pdf.output(str(path + filename), 'F')
 
-###         Mail         ###    Hier die Email Daten eingeben
-subject = 'Kassenbericht_'+Kassenname+'-' + str(Datum)
-body = "Dies ist der automatisch generierte Kassenbericht der Kasse "+Kassenname+"vom "+str(Datum)
-sender_email = "Absender E-Mail"
-receiver_email = "Empfänger E-Mail"
-password = "Absender Passwort"
-mail_server = "smtp.server.com"
-port = 465
+# Mail
+subject = 'Kassenbericht_' + Kassenname + '-' + str(Datum)
+body = "Dies ist der automatisch generierte Kassenbericht der Kasse " + Kassenname + "vom " + str(Datum)
 
 # Create a multipart message and set headers
 message = MIMEMultipart()
@@ -211,7 +214,6 @@ message["Bcc"] = receiver_email  # Recommended for mass emails
 
 # Add body to email
 message.attach(MIMEText(body, "plain"))
-
 
 # Open PDF file in binary mode
 with open(path + filename, "rb") as attachment:
