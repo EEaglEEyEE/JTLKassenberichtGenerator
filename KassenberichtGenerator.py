@@ -14,6 +14,7 @@
 #  0. You just DO WHAT THE FUCK YOU WANT TO.
 #
 
+import os
 import pyodbc
 import ssl
 import smtplib
@@ -37,8 +38,8 @@ border = 1
 header_row_height = 10
 
 # PDF - obligatorisch
-path = 'C:\Kassenberichte\\' # Speicherpfad des PDFs angeben
-Kassenname = 'Kasse' # Kassenname angeben
+path = 'C:\Kassenberichte\\'  # Speicherpfad des PDFs angeben
+Kassenname = 'Kasse'  # Kassenname angeben
 
 # Mail - obligatorisch
 sender_email = "Absender E-Mail"
@@ -175,9 +176,25 @@ for row in data:
     align = "C"
     pdf.set_fill_color(255)
 
+    row[3] = "{:.2f}".format(row[3])  # Der Preis wird mit zwei Nachkommastellen angezeigt
+    row[1] = int(row[1])  # die Menge wird ohne Kommastellen angezeigt
+
+    # Die Nummer aus der Bonnummer wird extrahiert
+    count = int(row[0][4:])
+
     for item in row:
-        if 0 > row[1]:
-            pdf.set_fill_color(220)
+
+        # De- und Encoding
+        if isinstance(item, str):
+            item = item.encode('windows-1252').decode('latin-1')
+
+        # Farbliche Zellenmarkierung
+        if (count % 2 == 0):
+            pdf.set_fill_color(230)  # Jede Zeile eines Bons wird leicht grau hinterlegt für die Übersichtlichkeit
+        if row[1] < 0:
+            pdf.set_fill_color(255, 170, 170)  # Wenn die Menge -1 beträgt (Retoure) wird die Zeile rot markiert
+
+        # Zellen füllen
         pdf.cell(col_width, row_height * spacing, txt=str(item), border=border, align=align, fill=1)
         if col_width == Bonnummer_width:
             col_width = Anzahl_width
@@ -234,7 +251,11 @@ message.attach(part)
 text = message.as_string()
 
 # Log in to server using secure context and send email
-context = ssl.create_default_context()
+# print(os.getenv('HOMEPATH'))
+# print(os.getenv('LOCALAPPDATA'))
+# context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)  # Use this if you have certificate issues
+# context.load_verify_locations(os.getenv('LOCALAPPDATA')+'\\Programs\\Python\\Python38\\Lib\\site-packages\\pip\\_vendor\\certifi\\cacert.pem')  # Use this if you have certificate issues
+context = ssl.create_default_context()  # Dont't use this if you have certificate issues
 with smtplib.SMTP_SSL(mail_server, port, context=context) as server:
     server.login(sender_email, password)
     server.sendmail(sender_email, receiver_email, text)
